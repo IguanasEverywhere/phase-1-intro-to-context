@@ -162,6 +162,27 @@ describe("The payroll system", function () {
         expect(hoursWorkedOnDate(cRecord, "0044-03-15")).to.equal(2)
       })
     })
+
+    describe("hoursWorkedOnDate", function () {
+      it("calculates that the employee worked 5.5 hours", function () {
+        cRecord = createEmployeeRecord(["Julius", "Caesar", "General", 1000])
+        updatedBpRecord = createTimeInEvent(cRecord, "0044-12-16 2345")
+        updatedBpRecord = createTimeOutEvent(cRecord, "0044-12-17 0515")
+        expect(hoursWorkedOnDate(cRecord, "0044-12-17")).to.equal(5.5)
+      })
+    })
+
+    describe("hoursWorkedOnDate", function () {
+      it("throws error if timesin and timesout dont match in length", function () {
+        cRecord = createEmployeeRecord(["Julius", "Caesar", "General", 1000])
+        updatedBpRecord = createTimeInEvent(cRecord, "0044-03-15 0900")
+        updatedBpRecord = createTimeOutEvent(cRecord, "0044-03-15 1100")
+        updatedBpRecord = createTimeOutEvent(cRecord, "0044-03-15 1200")
+        expect(function() {
+          hoursWorkedOnDate(cRecord, "0044-03-15")
+        }).to.throw('Number of timeInEvents does not match number of timeOutEvents');
+      })
+    })
   })
 
   describe("Given an employee record with a date-matched timeInEvent and timeOutEvent", function () {
